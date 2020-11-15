@@ -8,6 +8,7 @@ public class NewContactPresenter {
     private AppDatabase database;
     public interface MVPView extends BaseMVPView {
         void goBackToContactsPage(Contact contact);
+        void printErrorMessage();
     }
 
     public NewContactPresenter(MVPView view) {
@@ -16,17 +17,25 @@ public class NewContactPresenter {
     }
 
     public void createContact(String name, String phoneNumber, String email) {
-        // TODO: Check to make sure contents is not empty
-        new Thread(() -> {
-            // create new contact
-            Contact contact = new Contact();
-            contact.name = name;
-            contact.phoneNumber = phoneNumber;
-            contact.email = email;
-            // insert into database and retrieve id
-            contact.id = database.getContactDao().insert(contact);
-            // return to contacts page
-            view.goBackToContactsPage(contact);
-        }).start();
+        if (isNotEmpty(name, phoneNumber, email)) {
+            new Thread(() -> {
+                // create new contact
+                Contact contact = new Contact();
+                contact.name = name;
+                contact.phoneNumber = phoneNumber;
+                contact.email = email;
+                // insert into database and retrieve id
+                contact.id = database.getContactDao().insert(contact);
+                // return to contacts page
+                view.goBackToContactsPage(contact);
+            }).start();
+        }
+        else view.printErrorMessage();
+    }
+
+    public Boolean isNotEmpty(String name, String phoneNumber, String email) {
+        return name != null && name.length() > 0 &&
+                phoneNumber != null && phoneNumber.length() > 0 &&
+                email != null && email.length() > 0;
     }
 }
