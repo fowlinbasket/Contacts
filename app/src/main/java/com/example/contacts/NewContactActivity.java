@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.example.contacts.components.LabelledInput;
+import com.example.contacts.components.MaterialInput;
 import com.example.contacts.models.Contact;
 import com.example.contacts.presenters.NewContactPresenter;
 
@@ -26,15 +27,15 @@ public class NewContactActivity extends BaseActivity implements NewContactPresen
         ScrollView scrollView = new ScrollView(this);
 
         // create LabelledInputs
-        LabelledInput nameInput = new LabelledInput(this, "Name: ");
-        LabelledInput numInput = new LabelledInput(this, "Phone Number: ");
-        LabelledInput emailInput = new LabelledInput(this, "E-Mail: ");
+        MaterialInput nameInput = new MaterialInput(this, "Name");
+        MaterialInput phoneNumInput = new MaterialInput(this, "Phone Number");
+        MaterialInput emailInput = new MaterialInput(this, "E-Mail");
         AppCompatButton saveButton = new AppCompatButton(this);
-        saveButton.setText("Save Contact");
+        saveButton.setText("Save");
 
         saveButton.setOnClickListener(view -> {
             // save contact info into database, return to ContactsActivity
-            presenter.createContact(nameInput.data.getText().toString(), numInput.data.getText().toString(), emailInput.data.getText().toString());
+            presenter.createContact(nameInput.getText().toString(), phoneNumInput.getText().toString(), emailInput.getText().toString(), "");
         });
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         buttonParams.setMargins(20, 0, 20, 0);
@@ -42,13 +43,13 @@ public class NewContactActivity extends BaseActivity implements NewContactPresen
 
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.addView(nameInput);
-        mainLayout.addView(numInput);
+        mainLayout.addView(phoneNumInput);
         mainLayout.addView(emailInput);
         mainLayout.addView(saveButton);
 
-        scrollView.addView(mainLayout);
+//        scrollView.addView(mainLayout);
 
-        setContentView(scrollView);
+        setContentView(mainLayout);
     }
 
 

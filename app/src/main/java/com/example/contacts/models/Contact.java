@@ -11,6 +11,9 @@ public class Contact implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public long id;
 
+    @ColumnInfo(name = "picture_uri")
+    public String pictureUri;
+
     @ColumnInfo(name = "name")
     public String name;
 
@@ -19,4 +22,6 @@ public class Contact implements Serializable {
 
     @ColumnInfo(name = "email")
     public String email;
+
+
 }

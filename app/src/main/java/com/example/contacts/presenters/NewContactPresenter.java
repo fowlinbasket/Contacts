@@ -16,7 +16,7 @@ public class NewContactPresenter {
         this.database = this.view.getContextDatabase();
     }
 
-    public void createContact(String name, String phoneNumber, String email) {
+    public void createContact(String name, String phoneNumber, String email, String pictureUri) {
         if (isNotEmpty(name, phoneNumber, email)) {
             new Thread(() -> {
                 // create new contact
@@ -24,6 +24,7 @@ public class NewContactPresenter {
                 contact.name = name;
                 contact.phoneNumber = phoneNumber;
                 contact.email = email;
+                contact.pictureUri = pictureUri;
                 // insert into database and retrieve id
                 contact.id = database.getContactDao().insert(contact);
                 // return to contacts page
