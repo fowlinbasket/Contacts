@@ -5,19 +5,22 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.example.contacts.components.ClickableLabel;
 import com.example.contacts.models.Contact;
 import com.example.contacts.presenters.ContactsPresenter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class ContactsActivity extends BaseActivity implements ContactsPresenter.MVPView {
    private final int CREATE_NEW_CONTACT = 1;
     ContactsPresenter presenter;
-   LinearLayout mainLayout;
+   FrameLayout mainLayout;
    LinearLayout contactsLayout;
 
     @Override
@@ -25,25 +28,28 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
         super.onCreate(savedInstanceState);
         // Create presenter and views
         presenter = new ContactsPresenter(this);
-        mainLayout = new LinearLayout(this);
+        mainLayout = new FrameLayout(this);
         contactsLayout = new LinearLayout(this);
         ScrollView scrollView = new ScrollView(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
+
         contactsLayout.setOrientation(LinearLayout.VERTICAL);
-        scrollView.addView(mainLayout);
 
-        // Button to create new contacts
-        AppCompatButton createNewContactButton = new AppCompatButton(this);
-        mainLayout.addView(createNewContactButton);
-        mainLayout.addView(contactsLayout);
-        createNewContactButton.setText("New Contact");
+
+        FloatingActionButton fab = new FloatingActionButton(this);
+        FrameLayout.LayoutParams fabParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        fabParams.setMargins(0, 0, 48, 48);
+        fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
+        fab.setLayoutParams(fabParams);
+        fab.setImageResource(R.drawable.ic_baseline_add_24);
+
         // go to create new contact page
-        createNewContactButton.setOnClickListener(view -> goToNewContactPage());
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        buttonParams.setMargins(30, 10, 30, 10);
-        createNewContactButton.setLayoutParams(buttonParams);
+        fab.setOnClickListener(view -> goToNewContactPage());
+        scrollView.addView(contactsLayout);
 
-        setContentView(scrollView);
+        mainLayout.addView(scrollView);
+        mainLayout.addView(fab);
+
+        setContentView(mainLayout);
     }
 
     @Override

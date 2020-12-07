@@ -10,44 +10,43 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.contacts.R;
 
-public class ImageSelector extends FrameLayout {
+public class  ImageSelector extends FrameLayout {
     String imageUri;
     AppCompatImageView imageView;
 
-    public ImageSelector(Context context) {
-        this(context, "");
+    public interface ImageSelectorClickListener {
+        public void onClick();
     }
 
-    public ImageSelector(Context context, String imageUri) {
+    public ImageSelector(Context context, ImageSelectorClickListener listener) {
+        this(context, listener, "");
+    }
+
+    public ImageSelector(Context context, ImageSelectorClickListener listener, String imageUri) {
         super(context);
-        this.setBackgroundColor(getResources().getColor(R.color.colorDarkBackground, null));
-        this.imageUri = imageUri;
+        setBackgroundColor(getResources().getColor(R.color.colorDarkBackground));
         imageView = new AppCompatImageView(context);
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 480);
+        ViewGroup.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
+        this.imageUri = imageUri;
+        setImageUri(imageUri);
         imageView.setLayoutParams(params);
+        setOnClickListener(view -> {
+            listener.onClick();
+        });
 
         addView(imageView);
-        displayImage();
     }
 
-    public String getImageUri() {
-        return imageUri;
-    }
-
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
-        displayImage();
-    }
-
-    private void displayImage() {
+    public void setImageUri(String uri) {
+        this.imageUri = uri;
         if (imageUri.equals("")) {
-//            imageView.setImageResource(R.drawable.ic_baseline_add_a_photo_240);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            // display default image
-        } else {
+            imageView.setImageResource(R.drawable.ic_baseline_add_a_photo_240);
+        }
+        else {
             imageView.setImageURI(Uri.parse(imageUri));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            // display the imageUri
         }
     }
+
+    public String getImageUri() { return imageUri; }
 }

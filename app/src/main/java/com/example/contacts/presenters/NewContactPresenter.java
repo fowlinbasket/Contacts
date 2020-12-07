@@ -6,9 +6,26 @@ import com.example.contacts.models.Contact;
 public class NewContactPresenter {
     private MVPView view;
     private AppDatabase database;
+
+    public void handleCancelPress() {
+        view.goBackToContactsPage(null);
+    }
+
+    public void handleSelectPicturePress() {
+        view.goToPhotos();
+    }
+
+    public void handlePictureSelected(String uri) {
+        view.displayImage(uri);
+    }
+
     public interface MVPView extends BaseMVPView {
         void goBackToContactsPage(Contact contact);
         void printErrorMessage();
+
+        void goToPhotos();
+
+        void displayImage(String uri);
     }
 
     public NewContactPresenter(MVPView view) {
