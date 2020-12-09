@@ -46,9 +46,7 @@ public class ContactsPresenter {
     }
 
     public void handleContactDeleted(long id) {
-        contacts.removeIf(contact -> {
-            return contact.id == id;
-        });
+        contacts.removeIf(contact -> contact.id == id);
         view.removeContactView(id);
     }
 

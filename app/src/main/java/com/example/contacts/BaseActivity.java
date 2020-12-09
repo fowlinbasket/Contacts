@@ -14,8 +14,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseMVPV
 }
 
 /*
-Contacts Page (ContactsPresenter and ContactsActivity):
-    TODO: Display a circle with contact's picture
 Contact Page (ContactPresenter and ContactActivity):
     TODO: Add buttons for call, text, and email
  */

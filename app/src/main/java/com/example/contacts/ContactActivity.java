@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,11 +17,8 @@ import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.example.contacts.components.ContactCard;
-import com.example.contacts.components.ImageSelector;
 import com.example.contacts.models.Contact;
 import com.example.contacts.presenters.ContactPresenter;
 import com.google.android.material.card.MaterialCardView;
@@ -51,10 +47,9 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
         // retrieve id from intent
         contactID = intent.getLongExtra("id", -1);
         // create presenter and layouts
-        presenter = new ContactPresenter(this);
         mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-//        setContentView(mainLayout);
+        presenter = new ContactPresenter(this);
     }
 
     @Override
@@ -90,51 +85,70 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             nameParams.setMargins(48, 780, 0, 0);
             nameView.setLayoutParams(nameParams);
             frameLayout.addView(nameView);
+            LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            iconParams.setMargins(24, 36, 0, 36);
 
             // Phone Number
 
-            // TODO: Add call and message buttons to phoneLayout
             MaterialCardView phoneView = new MaterialCardView(this);
             LinearLayout phoneLayout = new LinearLayout(this);
             num = new MaterialTextView(this);
             num.setText(contact.phoneNumber);
             num.setTextSize(18);
             LinearLayout.LayoutParams numParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            numParams.setMargins(24, 24, 24, 24);
+            numParams.setMargins(48, 36, 24, 36);
             num.setLayoutParams(numParams);
             LinearLayout.LayoutParams phoneViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             phoneViewParams.setMargins(48, 48, 48, 24);
             phoneView.setLayoutParams(phoneViewParams);
+            // call icon
+            AppCompatImageView phoneIcon = new AppCompatImageView(this);
+            phoneIcon.setImageResource(R.drawable.ic_baseline_call_24);
+            phoneIcon.setLayoutParams(iconParams);
+            phoneLayout.addView(phoneIcon);
+            // number
             phoneLayout.addView(num);
             phoneView.addView(phoneLayout);
             mainLayout.addView(phoneView);
-
-            nameView.setOnClickListener(view -> {
+            // message icon
+            AppCompatImageView messageIcon = new AppCompatImageView(this);
+            messageIcon.setImageResource(R.drawable.ic_baseline_message_24);
+            LinearLayout.LayoutParams messageIconParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            messageIconParams.setMargins(460, 36, 24, 36);
+            messageIcon.setLayoutParams(messageIconParams);
+            phoneLayout.addView(messageIcon);
+            // onClickListeners
+            phoneIcon.setOnClickListener(view -> {
                 presenter.handleCallPressed(num.getText().toString());
             });
-            phoneView.setOnClickListener(view -> {
+            messageIcon.setOnClickListener(view -> {
                 presenter.handleTextMessagePressed(num.getText().toString());
             });
 
             // E-Mail
 
-            // TODO: Add email icon to emailLayout
             MaterialCardView emailView = new MaterialCardView(this);
             LinearLayout emailLayout = new LinearLayout(this);
             email = new MaterialTextView(this);
             email.setText(contact.email);
             email.setTextSize(18);
             LinearLayout.LayoutParams emailParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            emailParams.setMargins(24, 24, 24, 24);
+            emailParams.setMargins(48, 36, 24, 36);
             email.setLayoutParams(emailParams);
             LinearLayout.LayoutParams emailViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             emailViewParams.setMargins(48, 24, 48, 24);
             emailView.setLayoutParams(emailViewParams);
+            // email icon
+            AppCompatImageView emailIcon = new AppCompatImageView(this);
+            emailIcon.setImageResource(R.drawable.ic_baseline_email_24);
+            emailLayout.addView(emailIcon);
+            emailIcon.setLayoutParams(iconParams);
+
             emailLayout.addView(email);
             emailView.addView(emailLayout);
             mainLayout.addView(emailView);
 
-            emailView.setOnClickListener(view -> {
+            emailIcon.setOnClickListener(view -> {
                 presenter.handleEmailPressed(email.getText().toString());
             });
 
@@ -166,7 +180,6 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             });
             frameLayout.addView(fab);
 
-//            mainLayout.addView(cardView);
             setContentView(frameLayout);
         });
     }

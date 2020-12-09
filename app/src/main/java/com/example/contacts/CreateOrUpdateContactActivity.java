@@ -66,12 +66,16 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
                         }
                     }).show();
         });
+
+        // material inputs
+
         nameInput = new MaterialInput(this, "Name");
         phoneNumInput = new MaterialInput(this, "Phone Number");
         phoneNumInput.setInputType(InputType.TYPE_CLASS_PHONE);
         emailInput = new MaterialInput(this, "E-Mail");
 
-        // create buttons
+        // buttons
+
         MaterialButton saveButton = new MaterialButton(this, null, R.attr.materialButtonStyle);
         MaterialButton cancelButton = new MaterialButton(this, null, R.attr.borderlessButtonStyle);
         saveButton.setText("SAVE");
@@ -84,6 +88,8 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonsLayout.setPadding(48, 0, 48, 0);
         buttonsLayout.setGravity(Gravity.RIGHT);
+
+        // onClickListeners
 
         cancelButton.setOnClickListener(view -> {
             presenter.handleCancelPress();
@@ -155,27 +161,30 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
     @Override
     public void displayNameError() {
         runOnUiThread(() -> {
-            Snackbar.make(mainLayout, "Name cannot be blank", Snackbar.LENGTH_SHORT).show();
+            String message = "Name cannot be blank";
+            Snackbar.make(mainLayout, message, Snackbar.LENGTH_SHORT).show();
             nameInput.setErrorEnabled(true);
-            nameInput.setError("Name cannot be blank");
+            nameInput.setError(message);
         });
     }
 
     @Override
     public void displayPhoneNumError() {
         runOnUiThread(() -> {
-            Snackbar.make(mainLayout, "Contact needs a phone number", Snackbar.LENGTH_SHORT).show();
+            String message = "Contact needs a phone number";
+            Snackbar.make(mainLayout, message, Snackbar.LENGTH_SHORT).show();
             phoneNumInput.setErrorEnabled(true);
-            phoneNumInput.setError("Contact needs a phone number");
+            phoneNumInput.setError(message);
         });
     }
 
     @Override
     public void displayEmailError() {
         runOnUiThread(() -> {
-            Snackbar.make(mainLayout, "Must have a valid e-mail address", Snackbar.LENGTH_SHORT).show();
+            String message = "Must have a valid e-mail address";
+            Snackbar.make(mainLayout, message, Snackbar.LENGTH_SHORT).show();
             emailInput.setErrorEnabled(true);
-            emailInput.setError("Must have a valid e-mail address");
+            emailInput.setError(message);
         });
     }
 
@@ -195,10 +204,12 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            // user selected a picture from storage
             String uri = data.getData().toString();
             presenter.handlePictureSelected(uri);
         }
         if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            // user took a new picture
             presenter.handlePictureSelected(currentPhotoPath);
         }
     }

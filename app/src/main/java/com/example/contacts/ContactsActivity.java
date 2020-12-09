@@ -14,6 +14,7 @@ import com.example.contacts.components.ClickableLabel;
 import com.example.contacts.models.Contact;
 import com.example.contacts.presenters.ContactsPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class ContactsActivity extends BaseActivity implements ContactsPresenter.MVPView {
@@ -36,6 +37,7 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
 
         contactsLayout.setOrientation(LinearLayout.VERTICAL);
 
+        // Floating Action Button
 
         FloatingActionButton fab = new FloatingActionButton(this);
         FrameLayout.LayoutParams fabParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -82,6 +84,8 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
     @Override
     public void removeContactView(long id) {
         View view = contactsLayout.findViewWithTag(id);
+        // notify user that contact has been deleted
+        if (view instanceof ClickableLabel) Snackbar.make(contactsLayout, "Deleted "+((ClickableLabel) view).getContactName(), Snackbar.LENGTH_SHORT).show();
         contactsLayout.removeView(view);
     }
 
@@ -101,10 +105,12 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
             presenter.onNewContactCreated(contact);
         }
         if (requestCode == MODIFY_POST && resultCode == DELETED_RESULT) {
+            // remove contact from view
             long id = data.getLongExtra("id", -1);
             presenter.handleContactDeleted(id);
         }
         if (requestCode == MODIFY_POST && resultCode == UPDATED_RESULT) {
+            // update contact in view
             Contact contact = (Contact) data.getSerializableExtra("contact");
             presenter.handleContactUpdated(contact);
         }
