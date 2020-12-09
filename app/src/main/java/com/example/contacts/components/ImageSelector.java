@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.contacts.R;
 
-public class  ImageSelector extends FrameLayout {
+public class ImageSelector extends FrameLayout {
     String imageUri;
     AppCompatImageView imageView;
 
@@ -24,7 +24,7 @@ public class  ImageSelector extends FrameLayout {
 
     public ImageSelector(Context context, ImageSelectorClickListener listener, String imageUri) {
         super(context);
-        setBackgroundColor(getResources().getColor(R.color.colorDarkBackground));
+        setBackgroundColor(getResources().getColor(R.color.colorDarkBackground, null));
         imageView = new AppCompatImageView(context);
         ViewGroup.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
         this.imageUri = imageUri;

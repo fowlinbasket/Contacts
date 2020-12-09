@@ -1,11 +1,10 @@
 package com.example.contacts;
 
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -19,7 +18,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ContactsActivity extends BaseActivity implements ContactsPresenter.MVPView {
    private final int CREATE_NEW_CONTACT = 1;
-    ContactsPresenter presenter;
+   private final int MODIFY_POST = 2;
+   public final static int DELETED_RESULT = 1;
+   public final static int UPDATED_RESULT = 2;
+   ContactsPresenter presenter;
    FrameLayout mainLayout;
    LinearLayout contactsLayout;
 
@@ -58,9 +60,7 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
             // create clickable label for contact
             ClickableLabel label = new ClickableLabel(this, contact);
             label.setOnClickListener(view -> {
-                Intent intent = new Intent(this, ContactActivity.class);
-                intent.putExtra("id", contact.id);
-                startActivity(intent);
+                presenter.handleContactSelected(contact);
             });
             contactsLayout.addView(label);
         });
@@ -68,8 +68,27 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
 
     @Override
     public void goToNewContactPage() {
-        Intent intent = new Intent(this, NewContactActivity.class);
+        Intent intent = new Intent(this, CreateOrUpdateContactActivity.class);
         startActivityForResult(intent, CREATE_NEW_CONTACT);
+    }
+
+    @Override
+    public void goToContactPage(Contact contact) {
+        Intent intent = new Intent(this, ContactActivity.class);
+        intent.putExtra("id", contact.id);
+        startActivityForResult(intent, MODIFY_POST);
+    }
+
+    @Override
+    public void removeContactView(long id) {
+        View view = contactsLayout.findViewWithTag(id);
+        contactsLayout.removeView(view);
+    }
+
+    @Override
+    public void updateContactView(Contact contact) {
+        ClickableLabel view = contactsLayout.findViewWithTag(contact.id);
+        view.setContact(contact);
     }
 
 
@@ -80,6 +99,14 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
             // load contact from result
             Contact contact = (Contact) data.getSerializableExtra("result");
             presenter.onNewContactCreated(contact);
+        }
+        if (requestCode == MODIFY_POST && resultCode == DELETED_RESULT) {
+            long id = data.getLongExtra("id", -1);
+            presenter.handleContactDeleted(id);
+        }
+        if (requestCode == MODIFY_POST && resultCode == UPDATED_RESULT) {
+            Contact contact = (Contact) data.getSerializableExtra("contact");
+            presenter.handleContactUpdated(contact);
         }
     }
 }

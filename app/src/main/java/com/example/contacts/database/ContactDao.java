@@ -1,6 +1,7 @@
 package com.example.contacts.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -22,4 +23,7 @@ public interface ContactDao {
 
     @Insert
     long insert(Contact contact);
+
+    @Delete
+    void delete(Contact contact);
 }
