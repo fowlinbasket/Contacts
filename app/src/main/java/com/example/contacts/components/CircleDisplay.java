@@ -7,14 +7,12 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.example.contacts.R;
 
 public class CircleDisplay extends View {
-    Paint paint = new Paint();
-    String letter;
-    AppCompatImageView imageView;
+    private Paint paint = new Paint();
+    private String letter;
+
     int width = 40;
     public CircleDisplay(Context context, String letter) {
         super(context);

@@ -12,8 +12,3 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseMVPV
         return Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "contacts-database").build();
     }
 }
-
-/*
-Contact Page (ContactPresenter and ContactActivity):
-    TODO: Add buttons for call, text, and email
- */

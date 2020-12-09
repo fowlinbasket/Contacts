@@ -11,11 +11,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.example.contacts.R;
 
 public class ImageSelector extends FrameLayout {
-    String imageUri;
-    AppCompatImageView imageView;
+    private String imageUri;
+    private AppCompatImageView imageView;
 
     public interface ImageSelectorClickListener {
-        public void onClick();
+        void onClick();
     }
 
     public ImageSelector(Context context, ImageSelectorClickListener listener) {
@@ -30,9 +30,7 @@ public class ImageSelector extends FrameLayout {
         this.imageUri = imageUri;
         setImageUri(imageUri);
         imageView.setLayoutParams(params);
-        setOnClickListener(view -> {
-            listener.onClick();
-        });
+        setOnClickListener(view -> listener.onClick());
 
         addView(imageView);
     }

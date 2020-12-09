@@ -7,14 +7,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.example.contacts.models.Contact;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 public class ClickableLabel extends LinearLayout {
-    Contact contact;
+    private Contact contact;
 
     public ClickableLabel(Context context, Contact contact) {
         super(context);

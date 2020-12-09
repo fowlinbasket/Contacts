@@ -64,12 +64,6 @@ public class CreateOrUpdateContactPresenter {
         }).start();
     }
 
-    public Boolean isNotEmpty(String name, String phoneNumber, String email) {
-        return name != null && name.length() > 0 &&
-                phoneNumber != null && phoneNumber.length() > 0 &&
-                email != null && email.length() > 0;
-    }
-
     public void loadContact(long id) {
         if (id != DEFAULT_ID) {
             new Thread(() -> {

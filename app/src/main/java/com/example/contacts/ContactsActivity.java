@@ -42,7 +42,7 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
         FloatingActionButton fab = new FloatingActionButton(this);
         FrameLayout.LayoutParams fabParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         fabParams.setMargins(0, 0, 48, 48);
-        fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
+        fabParams.gravity = (Gravity.BOTTOM | Gravity.END);
         fab.setLayoutParams(fabParams);
         fab.setImageResource(R.drawable.ic_baseline_add_24);
 
@@ -61,9 +61,7 @@ public class ContactsActivity extends BaseActivity implements ContactsPresenter.
         runOnUiThread(() -> {
             // create clickable label for contact
             ClickableLabel label = new ClickableLabel(this, contact);
-            label.setOnClickListener(view -> {
-                presenter.handleContactSelected(contact);
-            });
+            label.setOnClickListener(view -> presenter.handleContactSelected(contact));
             contactsLayout.addView(label);
         });
     }

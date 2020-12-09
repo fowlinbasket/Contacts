@@ -2,19 +2,15 @@ package com.example.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
 
 import com.example.contacts.components.ImageSelector;
@@ -26,7 +22,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,7 +32,7 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
     private MaterialInput nameInput;
     private MaterialInput phoneNumInput;
     private MaterialInput emailInput;
-    String currentPhotoPath;
+    private String currentPhotoPath;
     private static int PICK_IMAGE = 1;
     private static int TAKE_PHOTO = 2;
 
@@ -52,20 +47,18 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
         mainLayout = new LinearLayout(this);
 
         // create MaterialInputs
-        imageSelector = new ImageSelector(this, () -> {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle("Select Image: ")
-                    .setItems(new CharSequence[]{"From Camera", "From Photos"}, (view, i) -> {
-                        if (i == 0) {
-                            // from camera
-                            presenter.handleTakePicturePress();
-                        }
-                        if (i == 1) {
-                            // from photos
-                            presenter.handleSelectPicturePress();
-                        }
-                    }).show();
-        });
+        imageSelector = new ImageSelector(this, () -> new MaterialAlertDialogBuilder(this)
+                .setTitle("Select Image: ")
+                .setItems(new CharSequence[]{"From Camera", "From Photos"}, (view, i) -> {
+                    if (i == 0) {
+                        // from camera
+                        presenter.handleTakePicturePress();
+                    }
+                    if (i == 1) {
+                        // from photos
+                        presenter.handleSelectPicturePress();
+                    }
+                }).show());
 
         // material inputs
 
@@ -87,13 +80,11 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
         buttonsLayout.addView(saveButton);
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonsLayout.setPadding(48, 0, 48, 0);
-        buttonsLayout.setGravity(Gravity.RIGHT);
+        buttonsLayout.setGravity(Gravity.END);
 
         // onClickListeners
 
-        cancelButton.setOnClickListener(view -> {
-            presenter.handleCancelPress();
-        });
+        cancelButton.setOnClickListener(view -> presenter.handleCancelPress());
 
         saveButton.setOnClickListener(view -> {
             nameInput.setErrorEnabled(false);
@@ -101,9 +92,9 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
             emailInput.setErrorEnabled(false);
             // save contact info into database, return to ContactsActivity
             presenter.saveContact(
-                    nameInput.getText().toString(),
-                    phoneNumInput.getText().toString(),
-                    emailInput.getText().toString(),
+                    nameInput.getText(),
+                    phoneNumInput.getText(),
+                    emailInput.getText(),
                     imageSelector.getImageUri()
             );
         });
@@ -114,8 +105,6 @@ public class CreateOrUpdateContactActivity extends BaseActivity implements Creat
         mainLayout.addView(phoneNumInput);
         mainLayout.addView(emailInput);
         mainLayout.addView(buttonsLayout);
-
-//        scrollView.addView(mainLayout);
 
         setContentView(mainLayout);
     }

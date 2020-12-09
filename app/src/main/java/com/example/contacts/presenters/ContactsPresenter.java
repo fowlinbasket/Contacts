@@ -29,9 +29,7 @@ public class ContactsPresenter {
         new Thread(() -> {
             // retrieve all contacts from database
             contacts = (ArrayList<Contact>) database.getContactDao().getAllContacts();
-            contacts.forEach(contact -> {
-                view.renderContact(contact);
-            });
+            contacts.forEach(contact -> view.renderContact(contact));
         }).start();
     }
 

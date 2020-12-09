@@ -7,7 +7,7 @@ public class ContactPresenter {
     private MVPView view;
     private Contact contact;
     private AppDatabase database;
-    boolean didUpdate = false;
+    private boolean didUpdate = false;
 
     public interface MVPView extends BaseMVPView {
         void renderContact(Contact contact);

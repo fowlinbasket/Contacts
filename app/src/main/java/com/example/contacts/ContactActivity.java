@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
@@ -62,16 +61,17 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             // Image
 
             AppCompatImageView image = new AppCompatImageView(this);
-            LinearLayout.LayoutParams photoParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 900);
             image.setBackgroundColor(getResources().getColor(R.color.colorDarkBackground, null));
+            LinearLayout.LayoutParams photoParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 900);
+            image.setLayoutParams(photoParams);
             if (contact.pictureUri.equals("")) {
-                image.setImageResource(R.drawable.ic_baseline_add_a_photo_240);
+                image.setImageResource(R.drawable.ic_baseline_photo_240);
+                image.setPadding(0, 150, 0, 150);
             }
             else {
                 image.setImageURI(Uri.parse(contact.pictureUri));
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
-            image.setLayoutParams(photoParams);
             mainLayout.addView(image);
 
             // Name
@@ -81,7 +81,7 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             nameView.setTextSize(32);
             nameView.setTextColor(Color.WHITE);
             FrameLayout.LayoutParams nameParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            nameParams.gravity = Gravity.LEFT;
+            nameParams.gravity = Gravity.START;
             nameParams.setMargins(48, 780, 0, 0);
             nameView.setLayoutParams(nameParams);
             frameLayout.addView(nameView);
@@ -97,6 +97,7 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             num.setTextSize(18);
             LinearLayout.LayoutParams numParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             numParams.setMargins(48, 36, 24, 36);
+            numParams.weight = 1;
             num.setLayoutParams(numParams);
             LinearLayout.LayoutParams phoneViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             phoneViewParams.setMargins(48, 48, 48, 24);
@@ -113,44 +114,40 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             // message icon
             AppCompatImageView messageIcon = new AppCompatImageView(this);
             messageIcon.setImageResource(R.drawable.ic_baseline_message_24);
-            LinearLayout.LayoutParams messageIconParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            messageIconParams.setMargins(460, 36, 24, 36);
+            LinearLayout.LayoutParams messageIconParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            messageIconParams.setMargins(48, 36, 24, 36);
             messageIcon.setLayoutParams(messageIconParams);
             phoneLayout.addView(messageIcon);
             // onClickListeners
-            phoneIcon.setOnClickListener(view -> {
-                presenter.handleCallPressed(num.getText().toString());
-            });
-            messageIcon.setOnClickListener(view -> {
-                presenter.handleTextMessagePressed(num.getText().toString());
-            });
+            phoneIcon.setOnClickListener(view -> presenter.handleCallPressed(num.getText().toString()));
+            messageIcon.setOnClickListener(view -> presenter.handleTextMessagePressed(num.getText().toString()));
 
             // E-Mail
 
-            MaterialCardView emailView = new MaterialCardView(this);
-            LinearLayout emailLayout = new LinearLayout(this);
-            email = new MaterialTextView(this);
-            email.setText(contact.email);
-            email.setTextSize(18);
-            LinearLayout.LayoutParams emailParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            emailParams.setMargins(48, 36, 24, 36);
-            email.setLayoutParams(emailParams);
-            LinearLayout.LayoutParams emailViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            emailViewParams.setMargins(48, 24, 48, 24);
-            emailView.setLayoutParams(emailViewParams);
-            // email icon
-            AppCompatImageView emailIcon = new AppCompatImageView(this);
-            emailIcon.setImageResource(R.drawable.ic_baseline_email_24);
-            emailLayout.addView(emailIcon);
-            emailIcon.setLayoutParams(iconParams);
+            if (!contact.email.equals("")) {
+                MaterialCardView emailView = new MaterialCardView(this);
+                LinearLayout emailLayout = new LinearLayout(this);
+                email = new MaterialTextView(this);
+                email.setText(contact.email);
+                email.setTextSize(18);
+                LinearLayout.LayoutParams emailParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                emailParams.setMargins(48, 36, 24, 36);
+                email.setLayoutParams(emailParams);
+                LinearLayout.LayoutParams emailViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                emailViewParams.setMargins(48, 24, 48, 24);
+                emailView.setLayoutParams(emailViewParams);
+                // email icon
+                AppCompatImageView emailIcon = new AppCompatImageView(this);
+                emailIcon.setImageResource(R.drawable.ic_baseline_email_24);
+                emailLayout.addView(emailIcon);
+                emailIcon.setLayoutParams(iconParams);
 
-            emailLayout.addView(email);
-            emailView.addView(emailLayout);
-            mainLayout.addView(emailView);
+                emailLayout.addView(email);
+                emailView.addView(emailLayout);
+                mainLayout.addView(emailView);
 
-            emailIcon.setOnClickListener(view -> {
-                presenter.handleEmailPressed(email.getText().toString());
-            });
+                emailIcon.setOnClickListener(view -> presenter.handleEmailPressed(email.getText().toString()));
+            }
 
             // Floating Action Button
 
@@ -158,7 +155,7 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
             fab.setImageResource(R.drawable.ic_baseline_edit_24);
             fab.setSize(FloatingActionButton.SIZE_MINI);
             FrameLayout.LayoutParams fabParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            fabParams.gravity = Gravity.RIGHT | Gravity.TOP;
+            fabParams.gravity = Gravity.END | Gravity.TOP;
             fabParams.setMargins(0, 12, 12, 0);
             fab.setLayoutParams(fabParams);
             fab.setOnClickListener(button -> {
@@ -185,7 +182,7 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_CONTACT && resultCode == Activity.RESULT_OK) {
             Contact contact = (Contact) data.getSerializableExtra("result");
@@ -217,12 +214,8 @@ public class ContactActivity extends BaseActivity implements ContactPresenter.MV
     public void displayDeleteConfirmation() {
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Are you sure you want to delete this contact?")
-                .setPositiveButton("Delete", (view, i) -> {
-                    presenter.deleteContact();
-                })
-                .setNeutralButton("Cancel", (view, i) -> {
-                    view.dismiss();
-                })
+                .setPositiveButton("Delete", (view, i) -> presenter.deleteContact())
+                .setNeutralButton("Cancel", (view, i) -> view.dismiss())
                 .show();
     }
 
